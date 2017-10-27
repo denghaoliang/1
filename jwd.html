@@ -4,8 +4,9 @@
 		<meta charset="UTF-8">
 		<title></title>
 	</head>
+	<script src="jquery-3.2.1.min.js"></script>
 	<body>
-  <div>经度为：<p id="jingdu"></p></div>
+  <div style="color: red;">经度为：<p id="jingdu"></p></div>
 <div>纬度为：<p id="weidu"></p></div>
 <button onclick="getLocation()">试一下</button>
 
@@ -13,21 +14,40 @@
 	<script>
       var y=document.getElementById("jingdu");
       var x=document.getElementById("weidu");
-      
+      var jd=null
+      var wd=null 
 function getLocation()
-  {
-  if (navigator.geolocation)
+{
+if (navigator.geolocation)
     {
     navigator.geolocation.getCurrentPosition(showPosition);
     }
-  else{x.innerHTML="Geolocation is not supported by this browser.";}
-  }
+else{x.innerHTML="Geolocation is not supported by this browser.";}
+}
 function showPosition(position)
-  {
-  	y.innerHTML=position.coords.longitude;
-  x.innerHTML=position.coords.latitude
+{
+	y.innerHTML=position.coords.longitude
+x.innerHTML=position.coords.latitude
+   jd=Number(position.coords.longitude) 
+   wd=Number(position.coords.latitude) 
+
  
-  }
+
+
+    $.ajax({
+		url:"http://apis.juhe.cn/geo/",
+		dataType:'jsonp',
+		processData: false,
+		type:'GET',
+		data:"lng="+jd+"&lat="+wd+"&type=2&dtype=&key=79a40402cc9a01ed1985bae6e8d47358",
+		success:function(data){
+			console.log(data)
+		
+			document.write(data.result.address)
+		
+		}
+})
+}
 
  </script>
 </html>
